@@ -1,5 +1,5 @@
 /*
-    js-clone - Clone objects and arrays 
+    js-clone - Clone anything
  */
 
 export function clone(src) {
