@@ -2,9 +2,14 @@
     js-clone - Clone anything
  */
 
-export function clone(src) {
+const RECURSE_LIMIT = 75
+
+export function clone(src, recurse = 0) {
     var result
 
+    if (recurse > RECURSE_LIMIT) {
+        return
+    }
     if (Array.isArray(src)) {
         result = src.slice(0)
     } else if (typeof src == 'object' && !(src instanceof Date || src instanceof RegExp || src == null)) {
