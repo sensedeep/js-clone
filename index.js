@@ -6,7 +6,7 @@
 
 const RECURSE_LIMIT = 75
 
-export function clone(src, recurse = 0) {
+export default function clone(src, recurse = 0) {
     let result
 
     if (recurse > RECURSE_LIMIT) {
