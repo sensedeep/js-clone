@@ -1,19 +1,22 @@
 /*
-    js-clone - Clone anything
+    js-clone - Clone objects recursively
 
     Cannot use Object.assign as it is not recursive
  */
 
-const RECURSE_LIMIT = 75
+const RECURSE_LIMIT = 50
 
 export default function clone(src, recurse = 0) {
     let result
 
     if (recurse > RECURSE_LIMIT) {
-        return
+        throw new Error('Recursive clone')
     }
     if (Array.isArray(src)) {
-        result = src.slice(0)
+        result = []
+        for (let item of src) {
+            result.push(clone(item, recurse + 1))
+        }
     } else if (typeof src == 'object' && !(src instanceof Date || src instanceof RegExp || src == null)) {
         result = Object.create(Object.getPrototypeOf(src))
         var i, descriptor, keys = Object.getOwnPropertyNames(src)
@@ -28,8 +31,11 @@ export default function clone(src, recurse = 0) {
                     enumerable: descriptor.enumerable,
                     writable: true,
                 }
-            } else if (descriptor.value && typeof descriptor.value === 'object' && keys[i] != '__observers__') {
-                descriptor.value = clone(descriptor.value)
+            } else if (descriptor.value && typeof descriptor.value === 'object') {
+                if (keys[i] == '__observers__' || keys[i] == '__ob__') {
+                    continue
+                }
+                descriptor.value = clone(descriptor.value, recurse + 1)
             }
             Object.defineProperty(result, keys[i], descriptor)
         }
