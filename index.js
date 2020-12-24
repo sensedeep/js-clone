@@ -25,6 +25,9 @@ export default function clone(src, recurse = 0) {
             if (descriptor.get) {
                 let value = descriptor.get()
                 if (value === undefined) continue
+                if (value && typeof value === 'object') {
+                    value = clone(value, recurse + 1)
+                }
                 descriptor = {
                     value,
                     configurable: descriptor.configurable,
