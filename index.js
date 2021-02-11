@@ -1,7 +1,5 @@
 /*
     js-clone - Clone objects recursively
-
-    Cannot use Object.assign as it is not recursive
  */
 
 const RECURSE_LIMIT = 50
